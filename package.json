@@ -1,0 +1,21 @@
+{
+  "name": "simple-map",
+  "version": "0.0.1",
+  "description": "map, layer, openlayers",
+  "private": true,
+  "scripts": {
+    "build": "npx webpack --watch --mode none",
+    "build-dev": "npx webpack --watch --mode development",
+    "build-prod": "npx webpack --watch --mode production"
+  },
+  "author": "Md. Atiqul Islam",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.7.2",
+    "ol": "^5.1.3"
+  }
+}

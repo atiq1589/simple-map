@@ -1,0 +1,9 @@
+# Package Manager
+node_modules
+
+# Distribution folder
+dist
+
+# Editor Settings
+.vscode
+
