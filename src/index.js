@@ -3,6 +3,8 @@ import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM.js';
 import TileWMS from 'ol/source/TileWMS';
+import { containsCoordinate } from 'ol/extent';
+import Overlay from 'ol/Overlay.js';
 
 import angular from 'angular';
 
@@ -66,13 +68,23 @@ import angular from 'angular';
             }];
         });
 
-    InitProject.$inject = ['$rootScope', 'TiledLayer', 'LayerService'];
+    InitProject.$inject = ['$rootScope', '$q', 'TiledLayer', 'LayerService'];
     MainController.$inject = ['LAYERS', '$rootScope', 'TiledLayer'];
     LayerService.$inject = ['$http', '$q'];
 
 
-    function InitProject($rootScope, TiledLayer, LayerService) {
-
+    function InitProject($rootScope, $q, TiledLayer, LayerService) {
+        const _overlay = new Overlay({
+            element: document.getElementById('popup'),
+            autoPan: true,
+            autoPanAnimation: {
+                duration: 250
+            }
+        });
+        $rootScope.CloseFeaturePopup = () => {
+            _overlay.setPosition(undefined);
+            return false;
+        }
         let _map = new Map({
             target: 'map',
             layers: [
@@ -82,23 +94,34 @@ import angular from 'angular';
                 ...TiledLayer.getList()
 
             ],
+            overlays: [_overlay],
             view: new View({
                 center: [23.8103, 90.4125],
                 zoom: 2
             })
         });
         const _view = _map.getView();
-        const _viewResolution = view.getResolution();
+        const _viewResolution = _view.getResolution();
 
-        function showFeatureInfo(url) {
-            LayerService.get(url)
-                .then(function(res) {
-                    console.log(res);
-                });
+        function _showPopup(res, coordinate) {
+            $rootScope.SelectedFeatures = res.map(l => l.features).reduce((acc, cur) => acc.concat(cur), []);
+            _overlay.setPosition(coordinate);
         }
 
-        function getLayerFeatureInfo(evt) {
+        function _getFeatureInfo(url) {
+            var deffered = $q.defer();
+            LayerService.get('/data.json')
+                .then(function(res) {
+                    deffered.resolve(res);
+                }, function(res) {
+                    deffered.reject(res);
+                });
+            return deffered.promise;
+        }
+
+        function _getLayerFeatureInfo(evt) {
             let layers = TiledLayer.get();
+            let promises = [];
             for (let k in layers) {
                 if (!layers[k].getVisible()) {
                     continue;
@@ -108,8 +131,16 @@ import angular from 'angular';
                     evt.coordinate,
                     _viewResolution,
                     'EPSG:3857', { 'INFO_FORMAT': 'application/json' });
-                showFeatureInfo(url);
+                promises.push(_getFeatureInfo(url));
+
             }
+            $q.all(promises).then(function(res) {
+                res = res.filter(r => typeof r == "object");
+                if (res.length > 0)
+                    _showPopup(res, evt.coordinate);
+            }, function() {
+
+            });
         }
 
         _map.on('singleclick', _getLayerFeatureInfo);
@@ -123,11 +154,11 @@ import angular from 'angular';
             let uri = url + Object.entries(params || {}).reduce((p, c, i) => i == 0 ? p + c.join('=') : p + '&' + c.join('='), '?');
             $http.get(uri)
                 .then(function(res) {
-                    deffered.resolve(res);
+                    deffered.resolve(res.data);
                 }, function() {
                     deffered.reject(arguments);
                 });
-            return $q.promise;
+            return deffered.promise;
         }
 
         return {

@@ -12,25 +12,12 @@
     <title>Simple Map</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="./node_modules/ol/ol.css">
+    <link rel="stylesheet" type="text/css" href="./dist/main.css">
 </head>
 <style>
-    .map {
-        height: 100%;
-        width: 100%;
-    }
     
-    .layer-info {
-        position: absolute;
-        /* top: -100px; */
-        bottom: 10%;
-        left: 75%;
-        background: rgba(255, 255, 255, .5);
-        padding: 20px;
-    }
-    .list {
-        list-style-type: none;
-    }
 </style>
 
 <body ng-controller="MainController as ctrl">
@@ -43,7 +30,25 @@
             <li ng-repeat="layer in ctrl.Layers"> <input type="checkbox" ng-init="isSelected=true" ng-model="isSelected" ng-change="ctrl.onLayerVisibilityChange(layer, isSelected)"> {{layer}}</li>
         </ul>
     </div>
+   
     <script src="./dist/main.js"></script>
 </body>
-
+<div id="popup" class="ol-popup">
+        <a href="#" id="popup-closer" class="ol-popup-closer" ng-click="CloseFeaturePopup()"></a>
+        <div id="popup-content" ng-init="i = 0">
+            <h4 class="title">Features </h4>
+            <div class="title" ng-hide="SelectedFeatures.length == 1">
+                <button ng-click="i > 0? i = i - 1: 0" ng-disabled="i == 0"><i class="fas fa-arrow-left"></i></button>
+                {{i + 1}} of {{SelectedFeatures.length}}
+                <button ng-click="i < SelectedFeatures.length? i = i + 1: i" ng-disabled="i == SelectedFeatures.length - 1"><i class="fas fa-arrow-right"></i></button>
+            </div> 
+            <hr>
+            <table>
+                <tr ng-repeat="(key,value) in SelectedFeatures[i].properties">
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                </tr>
+            </table>
+        </div>
+      </div>
 </html>

@@ -1,0 +1,57 @@
+{
+    "type": "FeatureCollection",
+    "totalFeatures": "unknown",
+    "features": [{
+        "type": "Feature",
+        "id": "primary_schools_2.1",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                89.07666779,
+                24.93877983
+            ]
+        },
+        "geometry_name": "the_geom",
+        "properties": {
+            "DIV_ID": "1",
+            "DIV_NAME": "RAJSHAHI",
+            "DIS_ID": "109",
+            "DIS_NAME": "JAIPURHAT",
+            "THANA_ID": "10901",
+            "THANA_NAME": "AKKELPUR",
+            "SCHOOL_COD": "109010206",
+            "SCHOOL_NAM": "LAKSHMI BHATTA",
+            "X_COORDINA": "89.07666779",
+            "Y_CORDINAT": "24.93877983"
+        }
+    },{
+        "type": "Feature",
+        "id": "primary_schools_2.1",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                89.07666779,
+                24.93877983
+            ]
+        },
+        "geometry_name": "the_geom",
+        "properties": {
+            "DIV_ID": "2",
+            "DIV_NAME": "Dhaka",
+            "DIS_ID": "109",
+            "DIS_NAME": "Banani",
+            "THANA_ID": "10901",
+            "THANA_NAME": "AKKELPUR",
+            "SCHOOL_COD": "109010206",
+            "SCHOOL_NAM": "LAKSHMI BHATTA",
+            "X_COORDINA": "89.07666779",
+            "Y_CORDINAT": "24.93877983"
+        }
+    }],
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:EPSG::4326"
+        }
+    }
+}
