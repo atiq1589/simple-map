@@ -11,6 +11,7 @@
   "author": "Md. Atiqul Islam",
   "license": "ISC",
   "devDependencies": {
+    "babel-minify-webpack-plugin": "^0.3.1",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0"
   },
